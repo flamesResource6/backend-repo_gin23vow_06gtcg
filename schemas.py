@@ -11,8 +11,8 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, HttpUrl
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -37,6 +37,21 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# Streaming app schemas
+class Program(BaseModel):
+    """
+    Programs collection schema
+    Collection name: "program" (lowercase of class name)
+    Represents a free, legally distributable TV program or video.
+    """
+    title: str = Field(..., description="Program title")
+    description: Optional[str] = Field(None, description="Short description")
+    category: str = Field("All", description="Category or genre")
+    thumbnail_url: Optional[HttpUrl] = Field(None, description="Thumbnail image URL")
+    video_url: HttpUrl = Field(..., description="Direct MP4 or HLS URL")
+    duration_seconds: Optional[int] = Field(None, ge=0, description="Approx duration in seconds")
+    tags: Optional[List[str]] = Field(default_factory=list, description="Search tags")
 
 # Add your own schemas here:
 # --------------------------------------------------
